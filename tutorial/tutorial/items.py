@@ -18,3 +18,8 @@ class DmozItem(scrapy.Item):
     title = scrapy.Field()
     link = scrapy.Field()
     desc = scrapy.Field()
+
+class SohuItem(scrapy.Item):
+    title = scrapy.Field()
+    content = scrapy.Field()
+    link = scrapy.Field()
