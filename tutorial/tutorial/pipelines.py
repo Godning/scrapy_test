@@ -9,7 +9,6 @@ from scrapy.exceptions import DropItem
 import pymysql
 import pymysql.cursors
 import redis
-Redis = redis.StrictRedis(host='localhost',port=6379,db=0)
 
 class TutorialPipeline(object):
     def __init__(self):
@@ -29,11 +28,14 @@ class TutorialPipeline(object):
 
 
 class DuplicatesPipeline(object):
+    def __init__(self):
+        self.Redis = redis.StrictRedis(host='localhost',port=6379,db=0)
+
     def process_item(self, item, spider):
-        if Redis.exists('url:%s' % item['link']):
+        if self.Redis.exists('url:%s' % item['link']):
             raise DropItem("Duplicate item found: %s" % item)
         else:
-            Redis.set('url:%s' % item['link'],1)
+            self.Redis.set('url:%s' % item['link'],1)
             return item
 
 class SohuPipeline(object):
