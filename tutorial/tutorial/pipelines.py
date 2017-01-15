@@ -32,10 +32,10 @@ class DuplicatesPipeline(object):
         self.Redis = redis.StrictRedis(host='localhost',port=6379,db=0)
 
     def process_item(self, item, spider):
-        if self.Redis.exists('url:%s' % item['link']):
+        if self.Redis.exists('id:%s' % item['link'].split('/')[-2]):
             raise DropItem("Duplicate item found: %s" % item)
         else:
-            self.Redis.set('url:%s' % item['link'],1)
+            self.Redis.set('id:%s' % item['link'].split('/')[-2],1)
             return item
 
 class SohuPipeline(object):
@@ -48,6 +48,7 @@ class SohuPipeline(object):
             passwd='',
 			charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor,)
+        self.url_seen = set()
 
     def process_item(self, item, spider):
         if True:
@@ -56,8 +57,8 @@ class SohuPipeline(object):
             link = ""
             for constr in item["content"]:
                 content += constr
-                self.connection.cursor().execute(sql, (item["title"][0], content,item["link"]))
-                self.connection.commit()
+            self.connection.cursor().execute(sql, (item["title"][0], content,item["link"]))
+            self.connection.commit()
             return item
 
     def close_spider(self,spider):
