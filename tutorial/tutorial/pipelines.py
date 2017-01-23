@@ -52,12 +52,12 @@ class SohuPipeline(object):
 
     def process_item(self, item, spider):
         if True:
-            sql = "insert into news values(%s, %s, %s)"
+            sql = "insert into news values(%s, %s, %s, %s, %s)"
             content = ""
             link = ""
             for constr in item["content"]:
                 content += constr
-            self.connection.cursor().execute(sql, (item["title"][0], content,item["link"]))
+            self.connection.cursor().execute(sql, (item["title"][0], content,item["link"],item["img_link"],item["img_name"]))
             self.connection.commit()
             return item
 

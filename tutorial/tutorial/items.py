@@ -23,3 +23,5 @@ class SohuItem(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
     link = scrapy.Field()
+    img_link = scrapy.Field()
+    img_name = scrapy.Field()
