@@ -57,9 +57,15 @@ class SohuPipeline(object):
             link = ""
             for constr in item["content"]:
                 content += constr
+            if len(item["img_link"]) == 0:
+                item["img_link"] = ""
+            if len(item["img_name"]) == 0:
+                item["img_name"] = ""
             self.connection.cursor().execute(sql, (item["title"][0], content,item["link"],item["img_link"],item["img_name"]))
             self.connection.commit()
             return item
 
     def close_spider(self,spider):
         self.connection.close()
+
+

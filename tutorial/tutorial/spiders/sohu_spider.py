@@ -19,8 +19,12 @@ class SohuSpider(CrawlSpider):
         item['link'] = response.url
         item['title'] = self.clear_tab(sel.xpath('h1[@class="h1"]/text()').extract())
         item['content'] = self.clear_tab(sel.xpath('p[@class="para"]/text()').extract())
-        item['img_link'] = sel.xpath('div[@class="media-wrapper"]/div[@class="image"]/img/@src').extract()
-        item['img_name'] = sel.xpath('div[@class="media-wrapper"]/div[@class="media-info"]/span/text()').extract()
+        try:
+            item['img_link'] = sel.xpath('div[@class="media-wrapper"]/div[@class="image"]/img/@src').extract()
+            item['img_name'] = sel.xpath('div[@class="media-wrapper"]/div[@class="media-info"]/span/text()').extract()
+        except Exception,e:
+            item['img_link'] = ""
+            item['img_name'] = "" 
         return item
 
     def clear_tab(self, sentence):
